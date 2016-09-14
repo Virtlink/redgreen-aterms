@@ -4,6 +4,7 @@ import org.metaborg.terms2.*;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 // This would be generated code.
@@ -95,22 +96,51 @@ public final class NameAgeProtoTerm extends ConsProtoTerm {
      * Initializes a new instance of the {@see ConsProtoTerm} class.
      *
      * @param factory The term factory.
-     * @param subterms The subterms.
+     * @param children The child terms.
+     * @param annotations The annotation terms.
      */
-    private NameAgeProtoTerm(TermFactory factory, List<? extends ProtoTerm> subterms) {
-        super(factory, CONSTRUCTOR, subterms);
+    private NameAgeProtoTerm(TermFactory factory, List<? extends ProtoTerm> children, List<? extends ProtoTerm> annotations) {
+        super(factory, CONSTRUCTOR, children, annotations);
     }
 
     /**
      * Creates a new instance of this term.
      *
      * @param factory The term factory to use.
-     * @param name The name.
-     * @param age The age.
+     * @param children The child terms.
+     * @param annotations The annotation terms.
      * @return The created term.
      */
-    public static NameAgeProtoTerm create(TermFactory factory, String name, int age) {
-        return create(factory, StringProtoTerm.create(factory, name), IntProtoTerm.create(factory, age));
+    public static NameAgeProtoTerm create(TermFactory factory, List<? extends IProtoTerm> children, List<? extends IProtoTerm> annotations) {
+        if (children.stream().anyMatch(o -> !(o instanceof ProtoTerm)))
+            throw new IllegalArgumentException("The child terms must be of type ProtoTerm.");
+        if (annotations.stream().anyMatch(o -> !(o instanceof ProtoTerm)))
+            throw new IllegalArgumentException("The annotation terms must be of type ProtoTerm.");
+
+        //noinspection unchecked
+        return factory.intern(new NameAgeProtoTerm(factory, (List<ProtoTerm>)children, (List<ProtoTerm>)annotations));
+    }
+
+    /**
+     * Creates a new instance of this term.
+     *
+     * @param factory The term factory to use.
+     * @param children The child terms.
+     * @return The created term.
+     */
+    public static NameAgeProtoTerm create(TermFactory factory, List<? extends IProtoTerm> children) {
+        return create(factory, children, Collections.emptyList());
+    }
+
+    /**
+     * Creates a new instance of this term.
+     *
+     * @param factory The term factory to use.
+     * @param children The child terms.
+     * @return The created term.
+     */
+    public static NameAgeProtoTerm create(TermFactory factory, IProtoTerm... children) {
+        return create(factory, Arrays.asList(children));
     }
 
     /**
@@ -129,26 +159,12 @@ public final class NameAgeProtoTerm extends ConsProtoTerm {
      * Creates a new instance of this term.
      *
      * @param factory The term factory to use.
-     * @param subterms The subterms.
+     * @param name The name.
+     * @param age The age.
      * @return The created term.
      */
-    public static NameAgeProtoTerm create(TermFactory factory, IProtoTerm... subterms) {
-        return create(factory, Arrays.asList(subterms));
-    }
-
-    /**
-     * Creates a new instance of this term.
-     *
-     * @param factory The term factory to use.
-     * @param subterms The subterms.
-     * @return The created term.
-     */
-    public static NameAgeProtoTerm create(TermFactory factory, List<? extends IProtoTerm> subterms) {
-        if (subterms.stream().anyMatch(o -> !(o instanceof ProtoTerm)))
-            throw new IllegalArgumentException("The subterms must be of type ProtoTerm.");
-
-        //noinspection unchecked
-        return factory.intern(new NameAgeProtoTerm(factory, (List<ProtoTerm>)subterms));
+    public static NameAgeProtoTerm create(TermFactory factory, String name, int age) {
+        return create(factory, StringProtoTerm.create(factory, name), IntProtoTerm.create(factory, age));
     }
 
     /**

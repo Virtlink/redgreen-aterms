@@ -4,6 +4,7 @@ import org.metaborg.terms2.*;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * An integer proto-term.
@@ -36,9 +37,10 @@ public final class IntProtoTerm extends ProtoTerm {
      * @param factory The term factory.
      * @param value The value.
      * @param width The width, in characters.
+     * @param annotations The annotation terms.
      */
-    private IntProtoTerm(TermFactory factory, int value, int width) {
-        super(factory, Collections.emptyList());
+    private IntProtoTerm(TermFactory factory, int value, int width, List<? extends ProtoTerm> annotations) {
+        super(factory, Collections.emptyList(), annotations);
 
         if (width < 0)
             throw new IllegalArgumentException("The width must be positive or null.");
@@ -53,13 +55,29 @@ public final class IntProtoTerm extends ProtoTerm {
      * @param factory The term factory to use.
      * @param value The value.
      * @param width The width of the term.
+     * @param annotations The annotation terms.
+     * @return The created term.
+     */
+    public static IntProtoTerm create(TermFactory factory, int value, int width, List<? extends IProtoTerm> annotations) {
+        if (width < 0)
+            throw new IllegalArgumentException("The width must be positive or null.");
+        if (annotations.stream().anyMatch(o -> !(o instanceof ProtoTerm)))
+            throw new IllegalArgumentException("The annotation terms must be of type ProtoTerm.");
+
+        //noinspection unchecked
+        return factory.intern(new IntProtoTerm(factory, value, width, (List<ProtoTerm>)annotations));
+    }
+
+    /**
+     * Creates a new instance of this term.
+     *
+     * @param factory The term factory to use.
+     * @param value The value.
+     * @param width The width of the term.
      * @return The created term.
      */
     public static IntProtoTerm create(TermFactory factory, int value, int width) {
-        if (width < 0)
-            throw new IllegalArgumentException("The width must be positive or null.");
-
-        return factory.intern(new IntProtoTerm(factory, value, width));
+        return create(factory, value, width, Collections.emptyList());
     }
 
     /**
@@ -94,6 +112,6 @@ public final class IntProtoTerm extends ProtoTerm {
      */
     @Override
     public String toString() {
-        return Integer.toString(this.value);
+        return Integer.toString(this.value) + annotationsToString();
     }
 }

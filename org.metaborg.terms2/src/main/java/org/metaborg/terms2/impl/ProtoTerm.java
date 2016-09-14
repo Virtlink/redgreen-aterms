@@ -4,6 +4,7 @@ import org.metaborg.terms2.IProtoTerm;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A proto-term (i.e. green term).
@@ -12,6 +13,7 @@ public abstract class ProtoTerm implements IProtoTerm {
 
     private final TermFactory factory;
     private final List<? extends ProtoTerm> children;
+    private final List<? extends ProtoTerm> annotations;
     private final int width;
 
     /**
@@ -24,12 +26,21 @@ public abstract class ProtoTerm implements IProtoTerm {
     }
 
     /**
-     * Gets the subterms.
+     * Gets the child terms.
      *
-     * @return The subterms.
+     * @return The child terms.
      */
     public List<? extends ProtoTerm> getChildren() {
         return this.children;
+    }
+
+    /**
+     * Gets the annotation terms.
+     *
+     * @return The annotation terms.
+     */
+    public List<? extends ProtoTerm> getAnnotations() {
+        return this.annotations;
     }
 
     /**
@@ -47,9 +58,10 @@ public abstract class ProtoTerm implements IProtoTerm {
      * @param factory The term factory.
      * @param children The subterms.
      */
-    ProtoTerm(TermFactory factory, List<? extends ProtoTerm> children) {
+    /* package */ ProtoTerm(TermFactory factory, List<? extends ProtoTerm> children, List<? extends ProtoTerm> annotations) {
         this.factory = factory;
         this.children = children;   // TODO: Safety copy.
+        this.annotations = annotations;   // TODO: Safety copy.
         this.width = calculateWidth(this.children);
     }
 
@@ -86,4 +98,18 @@ public abstract class ProtoTerm implements IProtoTerm {
      */
     @Override
     public abstract String toString();
+
+    /**
+     * Returns a string representation of the annotations.
+     *
+     * @return The string representation.
+     */
+    protected String annotationsToString() {
+        if (this.getAnnotations().isEmpty())
+            return "";
+
+        return "{" + this.getAnnotations().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", ")) + "}";
+    }
 }

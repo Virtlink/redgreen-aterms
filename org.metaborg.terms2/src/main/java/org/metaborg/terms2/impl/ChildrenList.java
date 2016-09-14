@@ -6,12 +6,12 @@ import java.util.AbstractList;
 import java.util.List;
 
 /**
- * A lazily created list of subterms.
+ * A lazily created list of child terms.
  */
 /* package */ final class ChildrenList extends SubtermList {
 
     /**
-     * Initializes a new instance of the {@see SubtermList} class.
+     * Initializes a new instance of the {@see ChildrenList} class.
      *
      * @param owner The owner of the list.
      */

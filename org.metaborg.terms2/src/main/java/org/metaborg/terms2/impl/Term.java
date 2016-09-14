@@ -18,7 +18,8 @@ public abstract class Term implements ITerm {
     private final boolean parentAnnotation;     // Whether this term is a child or an annotation.
     private final int offset;
     private final ProtoTerm prototype;
-    private final SubtermList children;
+    private final ChildrenList children;
+    private final AnnotationList annotations;
 
     /**
      * {@inheritDoc}
@@ -43,6 +44,14 @@ public abstract class Term implements ITerm {
     @Override
     public List<? extends Term> getChildren() {
         return this.children;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<? extends Term> getAnnotations() {
+        return this.annotations;
     }
 
     /**
@@ -90,6 +99,7 @@ public abstract class Term implements ITerm {
         this.parentAnnotation = parentAnnotation;
         this.offset = offset;
         this.children = new ChildrenList(this);
+        this.annotations = new AnnotationList(this);
     }
 
     /**

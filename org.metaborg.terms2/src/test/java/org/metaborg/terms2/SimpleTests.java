@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.metaborg.terms2.impl.*;
 
+import java.util.Arrays;
+
 public class SimpleTests {
     @Test
     public void BuildingATree() {
@@ -97,6 +99,34 @@ public class SimpleTests {
         assertEquals(32, ((NameAgeTerm)newTree.getRoot().getChildren().get(1)).getAge());
 
         newTree.getRoot().accept(new TestTermVisitor());
+        System.out.println();
+    }
+
+    @Test
+    public void CreateAnnotatedTree() {
+        // Arrange
+        IConstructor Cons = new Constructor("Cons", 2);
+        IConstructor Nil = new Constructor("Nil", 0);
+        IConstructor Pair = new Constructor("Pair", 2);
+
+        TermFactory factory = new TermFactory();
+        SyntaxTree tree = new SyntaxTree("myfile.txt",
+                ConsProtoTerm.create(factory, Pair,
+                        Arrays.asList(
+                                ConsProtoTerm.create(factory, Cons,
+                                        StringProtoTerm.create(factory, "MyString", 8),
+                                        ConsProtoTerm.create(factory, Nil)),
+                                IntProtoTerm.create(factory, 42, 2)
+                        ),
+                        Arrays.asList(
+                                ConsProtoTerm.create(factory, Pair,
+                                        StringProtoTerm.create(factory, "X"),
+                                        StringProtoTerm.create(factory, "Y"))
+                        ))
+        );
+
+        // Act
+        tree.getRoot().accept(new TestTermVisitor());
         System.out.println();
     }
 

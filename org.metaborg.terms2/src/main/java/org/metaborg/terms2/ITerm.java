@@ -36,6 +36,13 @@ public interface ITerm {
     List<? extends ITerm> getChildren();
 
     /**
+     * Gets the annotations of the term.
+     *
+     * @return The annotations of the term.
+     */
+    List<? extends ITerm> getAnnotations();
+
+    /**
      * Gets the offset of this term.
      *
      * @return The number of input characters this term is from the start of the input.

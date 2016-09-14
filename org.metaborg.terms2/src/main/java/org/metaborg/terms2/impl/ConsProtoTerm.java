@@ -4,6 +4,7 @@ import org.metaborg.terms2.*;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,12 +29,14 @@ public class ConsProtoTerm extends ProtoTerm {
      *
      * @param factory The term factory.
      * @param constructor The constructor.
-     * @param subterms The subterms.
+     * @param children The child terms.
+     * @param annotations The annotation terms.
      */
-    protected ConsProtoTerm(TermFactory factory, IConstructor constructor, List<? extends ProtoTerm> subterms) {
-        super(factory, subterms);
+    protected ConsProtoTerm(TermFactory factory, IConstructor constructor, List<? extends ProtoTerm> children, List<? extends ProtoTerm> annotations) {
+        super(factory, children, annotations);
 
-        assert subterms.size() == constructor.getArity();
+        if (children.size() != constructor.getArity())
+            throw new IllegalArgumentException("The number of children must be " + constructor.getArity());
 
         this.constructor = constructor;
     }
@@ -43,15 +46,18 @@ public class ConsProtoTerm extends ProtoTerm {
      *
      * @param factory The term factory to use.
      * @param constructor The constructor.
-     * @param subterms The subterms.
+     * @param children The child terms.
+     * @param annotations The annotation terms.
      * @return The created term.
      */
-    public static ConsProtoTerm create(TermFactory factory, IConstructor constructor, List<? extends IProtoTerm> subterms) {
-        if (subterms.stream().anyMatch(o -> !(o instanceof ProtoTerm)))
-            throw new IllegalArgumentException("The subterms must be of type ProtoTerm.");
+    public static ConsProtoTerm create(TermFactory factory, IConstructor constructor, List<? extends IProtoTerm> children, List<? extends IProtoTerm> annotations) {
+        if (children.stream().anyMatch(o -> !(o instanceof ProtoTerm)))
+            throw new IllegalArgumentException("The child terms must be of type ProtoTerm.");
+        if (annotations.stream().anyMatch(o -> !(o instanceof ProtoTerm)))
+            throw new IllegalArgumentException("The annotation terms must be of type ProtoTerm.");
 
         //noinspection unchecked
-        return factory.intern(new ConsProtoTerm(factory, constructor, (List<ProtoTerm>)subterms));
+        return factory.intern(new ConsProtoTerm(factory, constructor, (List<ProtoTerm>)children, (List<ProtoTerm>)annotations));
     }
 
     /**
@@ -59,11 +65,11 @@ public class ConsProtoTerm extends ProtoTerm {
      *
      * @param factory The term factory to use.
      * @param constructor The constructor.
-     * @param subterms The subterms.
+     * @param children The child terms.
      * @return The created term.
      */
-    public static ConsProtoTerm create(TermFactory factory, IConstructor constructor, IProtoTerm... subterms) {
-        return create(factory, constructor, Arrays.asList(subterms));
+    public static ConsProtoTerm create(TermFactory factory, IConstructor constructor, IProtoTerm... children) {
+        return create(factory, constructor, Arrays.asList(children), Collections.emptyList());
     }
 
     /**
@@ -76,7 +82,7 @@ public class ConsProtoTerm extends ProtoTerm {
         if (!(newChild instanceof ProtoTerm))
             throw new IllegalArgumentException("The child must extend ProtoTerm.");
 
-        return create(this.getFactory(), this.constructor, ListExt.withElement(this.getChildren(), index, newChild));
+        return create(this.getFactory(), this.constructor, ListExt.withElement(this.getChildren(), index, newChild), this.getAnnotations());
     }
 
     /**
@@ -94,6 +100,6 @@ public class ConsProtoTerm extends ProtoTerm {
     public String toString() {
         return this.constructor.getName() + "(" + this.getChildren().stream()
                 .map(Object::toString)
-                .collect(Collectors.joining(", ")) + ")";
+                .collect(Collectors.joining(", ")) + ")" + annotationsToString();
     }
 }
