@@ -2,6 +2,7 @@ package org.metaborg.terms2.impl;
 
 import org.metaborg.terms2.*;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,38 +15,88 @@ public final class NameAgeProtoTerm extends ConsProtoTerm {
 
     public static final IConstructor CONSTRUCTOR = new Constructor("NameAge", 2);
 
+    /**
+     * Gets the name term.
+     *
+     * @return The name term.
+     */
     public StringProtoTerm getNameTerm() {
         return (StringProtoTerm)this.getChildren().get(0);
     }
 
+    /**
+     * Gets the name.
+     *
+     * @return The name.
+     */
     public String getName() {
         return getNameTerm().getValue();
     }
 
+    /**
+     * Sets the name term.
+     *
+     * @param value The name term.
+     * @return The resulting new term.
+     */
     public NameAgeProtoTerm setNameTerm(StringProtoTerm value) {
         return this.withChild(0, value);
     }
 
+    /**
+     * Sets the name.
+     *
+     * @param value The name.
+     * @return The resulting new term.
+     */
     public NameAgeProtoTerm setName(String value) {
         return setNameTerm(StringProtoTerm.create(this.getFactory(), value));
     }
 
+    /**
+     * Gets the age term.
+     *
+     * @return The age term.
+     */
     public IntProtoTerm getAgeTerm() {
         return (IntProtoTerm)this.getChildren().get(1);
     }
 
+    /**
+     * Gets the age.
+     *
+     * @return The age.
+     */
     public int getAge() {
         return getAgeTerm().getValue();
     }
 
+    /**
+     * Sets the age term.
+     *
+     * @param value The age term.
+     * @return The resulting new term.
+     */
     public NameAgeProtoTerm setAgeTerm(IntProtoTerm value) {
         return this.withChild(1, value);
     }
 
+    /**
+     * Sets the age.
+     *
+     * @param value The age.
+     * @return The resulting new term.
+     */
     public NameAgeProtoTerm setAge(int value) {
         return setAgeTerm(IntProtoTerm.create(this.getFactory(), value));
     }
 
+    /**
+     * Initializes a new instance of the {@see ConsProtoTerm} class.
+     *
+     * @param factory The term factory.
+     * @param subterms The subterms.
+     */
     private NameAgeProtoTerm(TermFactory factory, List<? extends ProtoTerm> subterms) {
         super(factory, CONSTRUCTOR, subterms);
     }
@@ -100,11 +151,17 @@ public final class NameAgeProtoTerm extends ConsProtoTerm {
         return factory.intern(new NameAgeProtoTerm(factory, (List<ProtoTerm>)subterms));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    NameAgeTerm createTerm(SyntaxTree tree, Term parent, int parentIndex, int offset) {
+    NameAgeTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, int offset) {
         return new NameAgeTerm(tree, this, parent, parentIndex, offset);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public NameAgeProtoTerm withChild(int index, IProtoTerm newChild) {
         if (index < 0 || index >= this.getChildren().size())

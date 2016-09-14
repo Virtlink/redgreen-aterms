@@ -1,5 +1,7 @@
 package org.metaborg.terms2;
 
+import javax.annotation.Nullable;
+
 /**
  * A syntax tree.
  *
@@ -19,7 +21,7 @@ public interface ISyntaxTree {
      *
      * @return The filename; or null when not known.
      */
-    // NULLABLE
+    @Nullable
     String getFilename();
 
 }

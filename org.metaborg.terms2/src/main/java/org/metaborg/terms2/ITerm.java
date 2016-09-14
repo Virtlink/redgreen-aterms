@@ -1,5 +1,6 @@
 package org.metaborg.terms2;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -24,7 +25,8 @@ public interface ITerm {
      *
      * @return The parent term; or null when there is none.
      */
-    /* NULLABLE */ ITerm getParent();
+    @Nullable
+    ITerm getParent();
 
     /**
      * Gets the children of the term.

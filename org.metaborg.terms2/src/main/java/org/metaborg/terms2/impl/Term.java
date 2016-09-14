@@ -4,50 +4,80 @@ import org.metaborg.terms2.IProtoTerm;
 import org.metaborg.terms2.ITerm;
 import org.metaborg.terms2.ITermVisitor;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * A term.
+ */
 public abstract class Term implements ITerm {
 
     private final SyntaxTree tree;
-    private final Term parent;
+    @Nullable private final Term parent;
     private final int parentIndex;
     private final int offset;
     private final ProtoTerm prototype;
     private final SubtermList children;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SyntaxTree getTree() {
         return this.tree;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @Nullable
     public Term getParent() {
         return this.parent;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<? extends Term> getChildren() {
         return this.children;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getOffset() {
         return this.offset;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getWidth() {
         return this.prototype.getWidth();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProtoTerm getPrototype() {
         return this.prototype;
     }
 
-    Term(SyntaxTree tree, ProtoTerm prototype, /* NULLABLE */ Term parent, int parentIndex, int offset) {
-        assert tree != null;
-        assert prototype != null;
+    /**
+     * Initializes a new instance of the {@see ConsProtoTerm} class.
+     *
+     * @param tree The syntax tree.
+     * @param prototype The prototype.
+     * @param parent The parent term, or null.
+     * @param parentIndex The parent term index, or zero.
+     * @param offset The term offset, or zero.
+     */
+    /* package */ Term(SyntaxTree tree, ProtoTerm prototype, @Nullable Term parent, int parentIndex, int offset) {
         assert parentIndex >= 0;
         assert offset >= 0;
 
@@ -59,6 +89,9 @@ public abstract class Term implements ITerm {
         this.children = new SubtermList(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Term withChild(int index, IProtoTerm newChild) {
         if (!(newChild instanceof ProtoTerm))
@@ -75,8 +108,19 @@ public abstract class Term implements ITerm {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void accept(ITermVisitor visitor) {
         visitor.visitTerm(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this.getPrototype().toString();
     }
 }

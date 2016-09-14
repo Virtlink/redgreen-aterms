@@ -9,12 +9,34 @@ import org.metaborg.terms2.impl.StringTerm;
  */
 public interface ITermVisitor {
 
-    void visitTerm(ITerm term);
+    /**
+     * Visits a term.
+     *
+     * @param term The term.
+     */
+    default void visitTerm(ITerm term) {
+        // Does nothing by default.
+    }
 
+    /**
+     * Visits a constructor term.
+     *
+     * @param term The term.
+     */
     void visitConsTerm(ConsTerm term);
 
+    /**
+     * Visits an integer term.
+     *
+     * @param term The term.
+     */
     void visitIntTerm(IntTerm term);
 
+    /**
+     * Visits a string term.
+     *
+     * @param term The term.
+     */
     void visitStringTerm(StringTerm term);
 
 }
