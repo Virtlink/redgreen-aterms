@@ -34,10 +34,11 @@ public class ConsTerm extends Term {
      * @param prototype The prototype.
      * @param parent The parent term, or null.
      * @param parentIndex The parent term index, or zero.
+     * @param parentAnnotation Whether the parent has this term as a child (false) or an annotation (true).
      * @param offset The term offset, or zero.
      */
-    /* package */ ConsTerm(SyntaxTree tree, ConsProtoTerm prototype, @Nullable Term parent, int parentIndex, int offset) {
-        super(tree, prototype, parent, parentIndex, offset);
+    /* package */ ConsTerm(SyntaxTree tree, ConsProtoTerm prototype, @Nullable Term parent, int parentIndex, boolean parentAnnotation, int offset) {
+        super(tree, prototype, parent, parentIndex, parentAnnotation, offset);
     }
 
     /**

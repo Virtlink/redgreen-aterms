@@ -13,8 +13,9 @@ import java.util.List;
 public abstract class Term implements ITerm {
 
     private final SyntaxTree tree;
-    @Nullable private final Term parent;
-    private final int parentIndex;
+    @Nullable private final Term parent;        // The parent term.
+    private final int parentIndex;              // The index of this term in the parent.
+    private final boolean parentAnnotation;     // Whether this term is a child or an annotation.
     private final int offset;
     private final ProtoTerm prototype;
     private final SubtermList children;
@@ -75,9 +76,10 @@ public abstract class Term implements ITerm {
      * @param prototype The prototype.
      * @param parent The parent term, or null.
      * @param parentIndex The parent term index, or zero.
+     * @param parentAnnotation Whether the parent has this term as a child (false) or an annotation (true).
      * @param offset The term offset, or zero.
      */
-    /* package */ Term(SyntaxTree tree, ProtoTerm prototype, @Nullable Term parent, int parentIndex, int offset) {
+    /* package */ Term(SyntaxTree tree, ProtoTerm prototype, @Nullable Term parent, int parentIndex, boolean parentAnnotation, int offset) {
         assert parentIndex >= 0;
         assert offset >= 0;
 
@@ -85,8 +87,9 @@ public abstract class Term implements ITerm {
         this.prototype = prototype;
         this.parent = parent;
         this.parentIndex = parentIndex;
+        this.parentAnnotation = parentAnnotation;
         this.offset = offset;
-        this.children = new SubtermList(this);
+        this.children = new ChildrenList(this);
     }
 
     /**

@@ -21,7 +21,7 @@ public class SyntaxTree implements ISyntaxTree {
     public Term getRoot() {
         @Nullable Term rootTerm = this.root != null ? this.root.get() : null;
         if (rootTerm == null) {
-            rootTerm = this.protoRoot.createTerm(this, null, 0, 0);
+            rootTerm = this.protoRoot.createTerm(this, null, 0, false, 0);
             this.root = new WeakReference<>(rootTerm);
         }
         return rootTerm;

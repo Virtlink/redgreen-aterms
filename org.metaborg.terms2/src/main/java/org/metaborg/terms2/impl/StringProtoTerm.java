@@ -79,8 +79,8 @@ public class StringProtoTerm extends ProtoTerm {
      * {@inheritDoc}
      */
     @Override
-    StringTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, int offset) {
-        return new StringTerm(tree, this, parent, parentIndex, offset);
+    StringTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, boolean parentAnnotation, int offset) {
+        return new StringTerm(tree, this, parent, parentIndex, parentAnnotation, offset);
     }
 
     /**

@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * A lazily created list of subterms.
  */
-/* package */ final class SubtermList extends AbstractList<Term> {
+/* package */ abstract class SubtermList extends AbstractList<Term> {
 
     private final Term owner;
     private final WeakReference<Term>[] children;
@@ -25,30 +25,14 @@ import java.util.*;
      */
     @Override
     public Term get(int index) {
-        @Nullable WeakReference<Term> ref = children[index];
+        @Nullable WeakReference<Term> ref = this.children[index];
         @Nullable Term term = ref != null ? ref.get() : null;
         if (term == null) {
-            ProtoTerm protoChild = this.owner.getPrototype().getChildren().get(index);
-            term = protoChild.createTerm(owner.getTree(), owner, index, getOffset(index));
-            children[index] = new WeakReference<>(term);
+            ProtoTerm protoChild = getSubterms(this.owner.getPrototype()).get(index);
+            term = createSubterm(protoChild, this.owner.getTree(), this.owner, index);
+            this.children[index] = new WeakReference<>(term);
         }
         return term;
-    }
-
-    /**
-     * Gets the offset of the child with the specified index.
-     *
-     * @param index The zero-based index.
-     * @return The zero-based offset of the child.
-     */
-    private int getOffset(int index) {
-        int offset = this.owner.getOffset();
-        for (int i = 0; i < index; i++) {
-            offset += this.owner.getPrototype().getChildren().get(index).getWidth();
-        }
-        assert this.owner.getOffset() <= offset;
-        assert offset <= this.owner.getOffset() + this.owner.getPrototype().getWidth();
-        return offset;
     }
 
     /**
@@ -58,7 +42,25 @@ import java.util.*;
      */
     /* package */ SubtermList(Term owner) {
         //noinspection unchecked
-        this.children = (WeakReference<Term>[])new WeakReference<?>[owner.getPrototype().getChildren().size()];
+        this.children = (WeakReference<Term>[])new WeakReference<?>[getSubterms(owner.getPrototype()).size()];
         this.owner = owner;
     }
+
+    /**
+     * Gets the list of prototype terms that this list shadows.
+     *
+     * @param prototype The prototype.
+     * @return The list of prototype subterms.
+     */
+    protected abstract List<? extends ProtoTerm> getSubterms(ProtoTerm prototype);
+
+    /**
+     * Creates a subterm for a prototype subterm.
+     * @param prototype The prototype subterm.
+     * @param tree The syntax tree.
+     * @param owner The owner.
+     * @param index The zero-based index.
+     * @return The created subterm.
+     */
+    protected abstract Term createSubterm(ProtoTerm prototype, SyntaxTree tree, Term owner, int index);
 }

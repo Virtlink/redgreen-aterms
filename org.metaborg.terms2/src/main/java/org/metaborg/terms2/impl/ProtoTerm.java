@@ -75,10 +75,11 @@ public abstract class ProtoTerm implements IProtoTerm {
      * @param tree The syntax tree.
      * @param parent The parent term; or null.
      * @param parentIndex The parent index; or 0.
+     * @param parentAnnotation Whether the parent has this term as a child (false) or an annotation (true).
      * @param offset The offset; or 0.
      * @return The term.
      */
-    /* package */ abstract Term createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, int offset);
+    /* package */ abstract Term createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, boolean parentAnnotation, int offset);
 
     /**
      * {@inheritDoc}

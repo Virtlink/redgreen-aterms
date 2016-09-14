@@ -83,8 +83,8 @@ public class ConsProtoTerm extends ProtoTerm {
      * {@inheritDoc}
      */
     @Override
-    ConsTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, int offset) {
-        return new ConsTerm(tree, this, parent, parentIndex, offset);
+    ConsTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, boolean parentAnnotation, int offset) {
+        return new ConsTerm(tree, this, parent, parentIndex, parentAnnotation, offset);
     }
 
     /**

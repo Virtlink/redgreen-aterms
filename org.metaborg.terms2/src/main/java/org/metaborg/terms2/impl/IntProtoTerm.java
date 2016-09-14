@@ -85,8 +85,8 @@ public final class IntProtoTerm extends ProtoTerm {
      * {@inheritDoc}
      */
     @Override
-    IntTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, int offset) {
-        return new IntTerm(tree, this, parent, parentIndex, offset);
+    IntTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, boolean parentAnnotation, int offset) {
+        return new IntTerm(tree, this, parent, parentIndex, parentAnnotation, offset);
     }
 
     /**

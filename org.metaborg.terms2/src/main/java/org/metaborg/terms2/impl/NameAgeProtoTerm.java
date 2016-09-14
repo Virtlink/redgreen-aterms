@@ -155,8 +155,8 @@ public final class NameAgeProtoTerm extends ConsProtoTerm {
      * {@inheritDoc}
      */
     @Override
-    NameAgeTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, int offset) {
-        return new NameAgeTerm(tree, this, parent, parentIndex, offset);
+    NameAgeTerm createTerm(SyntaxTree tree, @Nullable Term parent, int parentIndex, boolean parentAnnotation, int offset) {
+        return new NameAgeTerm(tree, this, parent, parentIndex, parentAnnotation, offset);
     }
 
     /**
