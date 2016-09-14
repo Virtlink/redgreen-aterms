@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+group 'org.metaborg'
+version '2.1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile     "org.apache.commons:commons-collections4:4.1"
+
+    testCompile "junit:junit:4.12"
+}
+
+test {
+    testLogging.showStandardStreams = true
+}
